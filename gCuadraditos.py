@@ -116,10 +116,6 @@ class gCuadraditos:
         self.capture_window.show()
         self.playing = True
 
-    def pause(self):
-        self.pipeline.set_state(gst.STATE_PAUSED)
-        self.playing = False
-
     def stop(self):
         self.pipeline.set_state(gst.STATE_NULL)
         self.playing = False
@@ -134,11 +130,6 @@ class gCuadraditos:
 
     def _on_message_cb(self, bus, message):
         t = message.type
-        #if t == gst.MESSAGE_EOS:
-        #   if self._eos_cb:
-        #        cb = self._eos_cb
-        #        self._eos_cb = None
-        #        cb()
         if t == gst.MESSAGE_ELEMENT:
             s = message.structure
             if s.has_name("barcode"):

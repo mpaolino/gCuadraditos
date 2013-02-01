@@ -27,6 +27,7 @@ else:
 class gCuadraditos:
 
     def on_window_destroy(self, widget, data=None):
+        self.stop()
         gtk.main_quit()
      
     def __init__(self):
@@ -37,6 +38,8 @@ class gCuadraditos:
         self.window = builder.get_object("window1")
         self.button = builder.get_object("detectar")
         self.button.connect("clicked", self.start_stop)
+        self.link_button = builder.get_object("linkbutton")
+        self.link_button.hide()
         self.capture_window = builder.get_object("drawingarea")
         builder.connect_signals(self)       
 
@@ -66,7 +69,7 @@ class gCuadraditos:
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.capture_window.window.xid)
-                                    
+
     def create_pipeline(self):
         src = gst.element_factory_make("v4l2src", "camsrc")
         srccaps = gst.Caps('video/x-raw-yuv, width=%s, height=%s' %\
@@ -89,21 +92,28 @@ class gCuadraditos:
         self.pipeline.add(xvsink)
         zbar.link(xvsink)
 
-    def _clipboard_get_func_cb(self, clipboard, selection_data, info, data):
-        selection_data.set("text/uri-list", 8, data)
+#    def _clipboard_get_func_cb(self, clipboard, selection_data, info, data):
+#        selection_data.set("text/uri-list", 8, data)
 
-    def _clipboard_clear_func_cb(self, clipboard, data):
-        pass
+#    def _clipboard_clear_func_cb(self, clipboard, data):
+#        pass
 
-    def _copy_URI_to_clipboard(self):
-        gtk.Clipboard().set_with_data([('text/uri-list', 0, 0)],
-                                      self._clipboard_get_func_cb,
-                                      self._clipboard_clear_func_cb,
-                                      self.last_detection)
-        return True
+#    def _copy_URI_to_clipboard(self):
+#        gtk.Clipboard().set_with_data([('text/uri-list', 0, 0)],
+#                                      self._clipboard_get_func_cb,
+#                                      self._clipboard_clear_func_cb,
+#                                      self.last_detection)
+#        return True
+
+    def _set_link_button(self, uri):
+        self.link_button.set_uri(uri)
+        self.link_button.set_label(uri)
+        self.link_button.show()
 
     def play(self):
+        self.button.set_label("Detener")
         self.pipeline.set_state(gst.STATE_PLAYING)
+        self.capture_window.show()
         self.playing = True
 
     def pause(self):
@@ -113,14 +123,14 @@ class gCuadraditos:
     def stop(self):
         self.pipeline.set_state(gst.STATE_NULL)
         self.playing = False
+        self.capture_window.hide()
+        self.button.set_label("Detectar")
 
     def start_stop(self, w):
         if self.button.get_label() == "Detectar":
-            self.button.set_label("Detener")
             self.play()
         else:
             self.stop()
-            self.button.set_label("Detectar")
 
     def _on_message_cb(self, bus, message):
         t = message.type
@@ -133,7 +143,7 @@ class gCuadraditos:
             s = message.structure
             if s.has_name("barcode"):
                 self.stop()
-                self.window.hide()
+                self.capture_window.hide()
                 aplay.play(sound_click)
                 self.last_detection = s['symbol']
                 parsedurl = urlparse.urlparse(s['symbol'])
@@ -147,7 +157,8 @@ class gCuadraditos:
                     #                  'ella para abrirla en el navegador.'
                     #alert.connect('response', self._alert_uri_response_cb)
                     #self.ca.add_alert(alert)
-                    self._copy_URI_to_clipboard()
+                    #self._copy_URI_to_clipboard()
+                    self._set_link_button(s['symbol'])
                     #self.ca.alert.show()
                 else:
                     #alert = ConfirmationAlert()

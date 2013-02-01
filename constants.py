@@ -18,6 +18,7 @@ from os.path import abspath, dirname, join
 
 PROJECT_DIR = dirname(abspath(__file__))
 
-GFX_PATH = join(PROJECT_DIR, "gfx")
+MEDIA_PATH = join(PROJECT_DIR, "media")
 
-sound_click = join(GFX_PATH, 'photoShutter.wav')
+sound_click = join(MEDIA_PATH, 'photoShutter.wav')
+icon_file = join(MEDIA_PATH, 'gCuadraditos_icon.png')

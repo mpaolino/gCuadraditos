@@ -9,7 +9,7 @@ pygst.require("0.10")
 import gst
 import logging
 import aplay
-from constants import sound_click
+from constants import (sound_click, icon_file)
 import urlparse
 
 logger = logging.getLogger('gCuadraditos:cuadraditos.py')
@@ -36,10 +36,12 @@ class gCuadraditos:
         builder.add_from_file("ui.xml") 
         
         self.window = builder.get_object("window1")
+        self.window.set_icon_from_file(icon_file)
+
         self.button = builder.get_object("detectar")
         self.button.connect("clicked", self.start_stop)
         self.link_button = builder.get_object("linkbutton")
-        self.link_button.hide()
+        self.link_button.set_sensitive(False)
         self.capture_window = builder.get_object("drawingarea")
         builder.connect_signals(self)       
 
@@ -108,7 +110,7 @@ class gCuadraditos:
     def _set_link_button(self, uri):
         self.link_button.set_uri(uri)
         self.link_button.set_label(uri)
-        self.link_button.show()
+        self.link_button.set_sensitive(True)
 
     def play(self):
         self.button.set_label("Detener")
@@ -139,28 +141,17 @@ class gCuadraditos:
                 self.last_detection = s['symbol']
                 parsedurl = urlparse.urlparse(s['symbol'])
                 if parsedurl.scheme in self.recognized_schemes:
-                    #alert = TimeoutAlert(60)
-                    #alert.remove_button(gtk.RESPONSE_CANCEL)
-                    #alert.props.title = 'Direccion detectada!'
-                    #alert.props.msg = 'La dirección fue copiada al ' +\
-                    #                  'portatapeles. Acceda al ' +\
-                    #                  'marco de Sugar y haga click sobre ' +\
-                    #                  'ella para abrirla en el navegador.'
-                    #alert.connect('response', self._alert_uri_response_cb)
-                    #self.ca.add_alert(alert)
-                    #self._copy_URI_to_clipboard()
                     self._set_link_button(s['symbol'])
-                    #self.ca.alert.show()
                 else:
-                    #alert = ConfirmationAlert()
-                    #alert.props.title = 'Texto detectado. ' +\
-                    #                    '¿Desea copiarlo al portapapeles?'
-                    #alert.props.msg = s['symbol']
-                    #alert.connect('response', self._alert_text_response_cb)
-                    #self.ca.add_alert(alert)
-                    #self.ca.alert.show()
-                    pass
-
+                    the_dialog = gtk.MessageDialog(
+                                                self.window,
+                                                gtk.DIALOG_DESTROY_WITH_PARENT,
+                                                gtk.MESSAGE_INFO,
+                                                gtk.BUTTONS_CLOSE, 
+                                                s['symbol'])
+                    result = the_dialog.run()
+                    the_dialog.destroy()
+                    
         elif t == gst.MESSAGE_ERROR:
             #todo: if we come out of suspend/resume with errors, then get us
             #      back up and running...

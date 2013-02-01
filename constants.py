@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-# Copyright (c) 2012, Miguel Paolino <mpaolino@ideal.com.uy>
+# Copyright (c) 2013, Miguel Paolino <mpaolino@ideal.com.uy>
 # This file is part of gCuadraditos.
 #
 # gCuadraditos is free software: you can redistribute it and/or modify

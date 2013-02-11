@@ -10,6 +10,7 @@ import logging
 import aplay
 from constants import (sound_click, icon_file)
 import urlparse
+import gobject
 
 logger = logging.getLogger('gCuadraditos:cuadraditos.py')
 
@@ -36,7 +37,7 @@ class gCuadraditos:
         
         self.window = builder.get_object("window1")
         self.window.set_icon_from_file(icon_file)
-
+        
         self.button = builder.get_object("detectar")
         self.button.connect("clicked", self.start_stop)
         self.link_button = builder.get_object("linkbutton")
@@ -158,4 +159,5 @@ class gCuadraditos:
 if __name__ == "__main__":
     cuadraditos = gCuadraditos()
     gtk.gdk.threads_init()
+    gobject.idle_add(cuadraditos.play)
     gtk.main()

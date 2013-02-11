@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-#from gi.repository import Gtk
 import pygtk
 pygtk.require("2.0")
 import gtk
+
 import pygst
 pygst.require("0.10")
 import gst
@@ -44,10 +43,10 @@ class gCuadraditos:
         self.link_button.set_sensitive(False)
         self.capture_window = builder.get_object("drawingarea")
         builder.connect_signals(self)       
+        self.window.show_all()
 
         self.VIDEO_WIDTH = 352
         self.VIDEO_HEIGHT = 288
-        self.VIDEO_FRAMERATE = 5
         self.recognized_schemes = ['file', 'ftp', 'gopher', 'http', 'https',
                                    'imap', 'mailto', 'mms', 'news', 'nntp',
                                    'prospero', 'rsync', 'rtsp', 'rtspu',
@@ -66,12 +65,17 @@ class gCuadraditos:
 
     def _on_sync_message_cb(self, bus, message):
         if message.structure is None:
-            return
+            return False
         if message.structure.get_name() == 'prepare-xwindow-id':
+            gtk.gdk.threads_enter()
+            gtk.gdk.display_get_default().sync()
+            win_id = self.capture_window.window.xid
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
-            imagesink.set_xwindow_id(self.capture_window.window.xid)
-
+            imagesink.set_xwindow_id(win_id)
+            gtk.gdk.flush()
+            gtk.gdk.threads_leave()
+            
     def create_pipeline(self):
         src = gst.element_factory_make("v4l2src", "camsrc")
         srccaps = gst.Caps('video/x-raw-yuv, width=%s, height=%s' %\
@@ -94,18 +98,6 @@ class gCuadraditos:
         self.pipeline.add(xvsink)
         zbar.link(xvsink)
 
-#    def _clipboard_get_func_cb(self, clipboard, selection_data, info, data):
-#        selection_data.set("text/uri-list", 8, data)
-
-#    def _clipboard_clear_func_cb(self, clipboard, data):
-#        pass
-
-#    def _copy_URI_to_clipboard(self):
-#        gtk.Clipboard().set_with_data([('text/uri-list', 0, 0)],
-#                                      self._clipboard_get_func_cb,
-#                                      self._clipboard_clear_func_cb,
-#                                      self.last_detection)
-#        return True
 
     def _set_link_button(self, uri):
         self.link_button.set_uri(uri)
@@ -141,14 +133,14 @@ class gCuadraditos:
                 self.last_detection = s['symbol']
                 parsedurl = urlparse.urlparse(s['symbol'])
                 if parsedurl.scheme in self.recognized_schemes:
-                    self._set_link_button(s['symbol'])
+                    self._set_link_button(s['symbol'].encode('utf-8'))
                 else:
                     the_dialog = gtk.MessageDialog(
                                                 self.window,
                                                 gtk.DIALOG_DESTROY_WITH_PARENT,
                                                 gtk.MESSAGE_INFO,
                                                 gtk.BUTTONS_CLOSE, 
-                                                s['symbol'])
+                                                s['symbol'].encode('utf-8'))
                     result = the_dialog.run()
                     the_dialog.destroy()
                     
@@ -162,5 +154,6 @@ class gCuadraditos:
 
 if __name__ == "__main__":
     cuadraditos = gCuadraditos()
-    cuadraditos.window.show()
+    #cuadraditos.window.show()
+    gtk.gdk.threads_init()
     gtk.main()

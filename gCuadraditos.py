@@ -128,21 +128,24 @@ class gCuadraditos:
             s = message.structure
             if s.has_name("barcode"):
                 self.stop()
-                self.capture_window.hide()
                 aplay.play(sound_click)
                 self.last_detection = s['symbol']
                 parsedurl = urlparse.urlparse(s['symbol'])
                 if parsedurl.scheme in self.recognized_schemes:
                     self._set_link_button(s['symbol'].encode('utf-8'))
                 else:
+                    gtk.gdk.threads_enter()
                     the_dialog = gtk.MessageDialog(
                                                 self.window,
-                                                gtk.DIALOG_DESTROY_WITH_PARENT,
-                                                gtk.MESSAGE_INFO,
-                                                gtk.BUTTONS_CLOSE, 
-                                                s['symbol'].encode('utf-8'))
-                    result = the_dialog.run()
+                                                gtk.DIALOG_MODAL,
+                                                type=gtk.MESSAGE_INFO,
+                                                buttons=gtk.BUTTONS_OK)
+                    the_dialog.set_markup("<b>%s</b>" % 'Texto detectado:')
+                    the_dialog.format_secondary_markup(s['symbol'].\
+                                                        encode('utf-8'))
+                    the_dialog.run()
                     the_dialog.destroy()
+                    gtk.gdk.threads_leave()
                     
         elif t == gst.MESSAGE_ERROR:
             #todo: if we come out of suspend/resume with errors, then get us
@@ -154,6 +157,5 @@ class gCuadraditos:
 
 if __name__ == "__main__":
     cuadraditos = gCuadraditos()
-    #cuadraditos.window.show()
     gtk.gdk.threads_init()
     gtk.main()

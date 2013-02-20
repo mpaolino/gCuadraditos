@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0.0
+Name=gCuadraditos 
+Name[es]=gCuadraditos
+GenericName=Webcam QR reader
+GenericName[es]=Lector QR para webcam
+Comment=Read QR codes with your webcam
+Comment[es]=Lee códigos QR con tu camara web
+Exec=gCuadraditos
+Icon=gCuadraditos.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;
+

@@ -1,7 +1,15 @@
 #!/bin/sh
 INSTALL_DIR='/usr/share/gCuadraditos'
-export LD_LIBRARY_PATH="$INSTALL_DIR/lib"
-export GST_PLUGIN_PATH="$INSTALL_DIR/lib"
+
+ARCH=`uname -m`
+
+if [ "$ARCH" == "armv7l" ]; then
+    export LD_LIBRARY_PATH="$INSTALL_DIR/lib/arm"
+    export GST_PLUGIN_PATH="$INSTALL_DIR/lib/arm"
+else
+    export LD_LIBRARY_PATH="$INSTALL_DIR/lib/i686"
+    export GST_PLUGIN_PATH="$INSTALL_DIR/lib/i686"
+fi
 
 python "$INSTALL_DIR/gCuadraditos.py"
 

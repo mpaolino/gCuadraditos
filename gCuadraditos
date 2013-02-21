@@ -1,0 +1,7 @@
+#!/bin/sh
+INSTALL_DIR='/usr/share/gCuadraditos'
+export LD_LIBRARY_PATH="$INSTALL_DIR/lib"
+export GST_PLUGIN_PATH="$INSTALL_DIR/lib"
+
+python "$INSTALL_DIR/gCuadraditos.py"
+

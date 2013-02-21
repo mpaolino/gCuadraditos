@@ -8,7 +8,7 @@ pygst.require("0.10")
 import gst
 import logging
 import aplay
-from constants import (sound_click, icon_file)
+from constants import (sound_click, icon_file, ui_file)
 import urlparse
 import gobject
 
@@ -33,7 +33,7 @@ class gCuadraditos:
     def __init__(self):
     
         builder = gtk.Builder()
-        builder.add_from_file("ui.xml") 
+        builder.add_from_file(ui_file) 
         
         self.window = builder.get_object("window1")
         self.window.set_icon_from_file(icon_file)

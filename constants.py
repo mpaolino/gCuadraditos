@@ -20,5 +20,7 @@ PROJECT_DIR = dirname(abspath(__file__))
 
 MEDIA_PATH = join(PROJECT_DIR, "media")
 
+ui_file = join(PROJECT_DIR, "ui.xml")
+
 sound_click = join(MEDIA_PATH, 'photoShutter.wav')
 icon_file = join(MEDIA_PATH, 'gCuadraditos_icon.png')

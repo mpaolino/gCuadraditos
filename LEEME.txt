@@ -1,0 +1,20 @@
+gCuadraditos
+------------
+
+gCuadraditos es un lector de códigos QR para Gnome. 
+
+
+Como Instalar
+-------------
+Ejecute el comando INSTALAR.sh. Por defecto el programa se instalará en '~/.gCuadraditos' y se agregará una entrada al menú de Gnome bajo 'Aplicaciones->Sonido y Video'.
+
+
+Más información
+---------------
+http://cuadraditos.uy
+
+
+Autor
+-----
+
+Miguel Paolino <mpaolino@ideal.com.uy>

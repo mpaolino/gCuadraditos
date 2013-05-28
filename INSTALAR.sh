@@ -29,28 +29,24 @@ while [ -h "$SOURCE" ]; do
   	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+GDIAG_BGTITLE="Instalación gCuadraditos"
+
 
 if [ "x$DEFAULT_INSTALL_DIR" = "x" ]; then
-	echo -n "Ingrese directorio de instalación: "
+	INSTALL_DIR_INPUT=`gdialog --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 1 200 2>&1`
 else
-	echo -n "Ingrese directorio de instalación o presione ENTER para usar la ruta por defecto [$DEFAULT_INSTALL_DIR]: "
+	INSTALL_DIR_INPUT=`gdialog --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 1 200 "$DEFAULT_INSTALL_DIR" 2>&1`
 fi
-	read INSTALL_DIR_INPUT
-	echo -n -e "\n"
 
 if [ "x$INSTALL_DIR_INPUT" = "x" ]; then
 	INSTALL_DIR_INPUT=$DEFAULT_INSTALL_DIR
 fi
 
 if [ -d "$INSTALL_DIR_INPUT" -a -w "$INSTALL_DIR_INPUT" ]; then
-	echo -n "El directorio "$INSTALL_DIR_INPUT" ya existe, borrar directorio y realizar nueva instalación? s/[n]: "
-        read -s -t 10 -n 1 ANSWER
-	if [ "x$ANSWER" = "xs" -o "x$ANSWER" = "xS" ]; then
-		echo "s"
+	gdialog --title "$GDIAG_BGTITLE" --yesno "El directorio \"$INSTALL_DIR_INPUT\" ya existe, borrar directorio y realizar nueva instalación?" 1 250
+	if [ "$?" = "0" ]; then
 		rm -fr "$INSTALL_DIR_INPUT"
 	else
-		echo "n"
-		echo "Abortando"
 		exit 1
 	fi
 fi
@@ -58,7 +54,8 @@ fi
 mkdir "$INSTALL_DIR_INPUT"
 
 if [ "$?" != "0" ]; then
-	echo "Abortando instalación" 
+	gdialog --title "$GDIAG_BGTITLE" --msgbox "No se pudo crear \"$INSTALL_DIR_INPUT\", abortando instalación" 1 250
+	exit 1 
 fi
 
 ALL_FILES='aplay.py constants.py media COPYING gCuadraditos.py LEEME.txt README.md gCuadraditos lib ui.xml'
@@ -66,7 +63,7 @@ ALL_FILES='aplay.py constants.py media COPYING gCuadraditos.py LEEME.txt README.
 for one_file in $ALL_FILES; do
 	cp -r "$DIR/$one_file" "$INSTALL_DIR_INPUT/"
 	if [ "$?" != "0" ]; then 
-		echo "Fallo la copia del archivo `pwd`/$one_file, abortando."
+		gdialog --title "$GDIAG_BGTITLE" --msgbox "Fallo la copia del archivo `pwd`/$one_file, abortando instalación." 1 250
 	        exit 1
 	fi
 done
@@ -87,5 +84,5 @@ sed -i '/^PATH\=\$PATH:.*gCuadraditos$/d' "$HOME/.bashrc"
 # Set path to binary
 echo -e "\nPATH=\$PATH:$INSTALL_DIR_INPUT" >> "$HOME/.bashrc"
 
-echo "Instalación completada. Inicie el programa desde el menú \"Sonido y Video\" o desde consola ejecutando \"$INSTALL_DIR_INPUT/gCuadraditos\""
+gdialog --title "$GDIAG_BGTITLE" --msgbox "Instalación completada.\nInicie el programa desde el menú \"Sonido y Video\" o desde consola ejecutando \"$INSTALL_DIR_INPUT/gCuadraditos\"" 1 250
 exit 0

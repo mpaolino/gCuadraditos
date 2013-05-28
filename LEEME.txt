@@ -12,6 +12,3 @@ Ejecute el comando INSTALAR.sh. Por defecto el programa se instalará en '~/.gCu
 Más información
 ---------------
 http://cuadraditos.uy
-
-
-

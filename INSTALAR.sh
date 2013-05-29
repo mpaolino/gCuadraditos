@@ -29,21 +29,34 @@ while [ -h "$SOURCE" ]; do
   	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+GDIALOG=`which gdialog 2>/dev/null`
+DIALOG=`which dialog 2>/dev/null`
+if [ "x$GDIALOG" = "x" -a "x$DIALOG" = "x" ]; then
+    echo "Abortando instalación. Ni dialog ni gdialog instalados en el sistema"
+    exit 1
+fi
+
+if [ "x$DIALOG" = "x" ]; then
+    DIAG="$GDIALOG"
+else
+    DIAG="$DIALOG --stdout"
+fi
+
 GDIAG_BGTITLE="Instalación gCuadraditos"
 
 
 if [ "x$DEFAULT_INSTALL_DIR" = "x" ]; then
-	INSTALL_DIR_INPUT=`gdialog --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 1 200 2>&1`
+	INSTALL_DIR_INPUT=`$DIAG --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 6 100 2>&1`
 else
-	INSTALL_DIR_INPUT=`gdialog --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 1 200 "$DEFAULT_INSTALL_DIR" 2>&1`
+	INSTALL_DIR_INPUT=`$DIAG --title "$GDIAG_BGTITLE" --inputbox "Ingrese directorio de instalación para gCuadraditos" 6 100 "$DEFAULT_INSTALL_DIR" 2>&1`
 fi
 
 if [ "x$INSTALL_DIR_INPUT" = "x" ]; then
-	INSTALL_DIR_INPUT=$DEFAULT_INSTALL_DIR
+    exit 1
 fi
 
 if [ -d "$INSTALL_DIR_INPUT" -a -w "$INSTALL_DIR_INPUT" ]; then
-	gdialog --title "$GDIAG_BGTITLE" --yesno "El directorio \"$INSTALL_DIR_INPUT\" ya existe, borrar directorio y realizar nueva instalación?" 1 250
+	$DIAG --title "$GDIAG_BGTITLE" --yesno "El directorio \"$INSTALL_DIR_INPUT\" ya existe, borrar directorio y realizar nueva instalación?" 5 100
 	if [ "$?" = "0" ]; then
 		rm -fr "$INSTALL_DIR_INPUT"
 	else
@@ -54,7 +67,7 @@ fi
 mkdir "$INSTALL_DIR_INPUT"
 
 if [ "$?" != "0" ]; then
-	gdialog --title "$GDIAG_BGTITLE" --msgbox "No se pudo crear \"$INSTALL_DIR_INPUT\", abortando instalación" 1 250
+	$DIAG --title "$GDIAG_BGTITLE" --msgbox "No se pudo crear \"$INSTALL_DIR_INPUT\", abortando instalación" 5 100
 	exit 1 
 fi
 
@@ -63,7 +76,7 @@ ALL_FILES='aplay.py constants.py media COPYING gCuadraditos.py LEEME.txt README.
 for one_file in $ALL_FILES; do
 	cp -r "$DIR/$one_file" "$INSTALL_DIR_INPUT/"
 	if [ "$?" != "0" ]; then 
-		gdialog --title "$GDIAG_BGTITLE" --msgbox "Fallo la copia del archivo `pwd`/$one_file, abortando instalación." 1 250
+		$DIAG --title "$GDIAG_BGTITLE" --msgbox "Fallo la copia del archivo `pwd`/$one_file, abortando instalación." 10 100
 	        exit 1
 	fi
 done
@@ -84,5 +97,5 @@ sed -i '/^PATH\=\$PATH:.*gCuadraditos$/d' "$HOME/.bashrc"
 # Set path to binary
 echo -e "\nPATH=\$PATH:$INSTALL_DIR_INPUT" >> "$HOME/.bashrc"
 
-gdialog --title "$GDIAG_BGTITLE" --msgbox "Instalación completada.\nInicie el programa desde el menú \"Sonido y Video\" o desde consola ejecutando \"$INSTALL_DIR_INPUT/gCuadraditos\"" 1 250
+$DIAG --title "$GDIAG_BGTITLE" --msgbox "Instalación completada.\nInicie el programa desde el menú \"Sonido y Video\" o desde consola ejecutando \"$INSTALL_DIR_INPUT/gCuadraditos\"" 6 100
 exit 0

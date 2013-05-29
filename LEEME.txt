@@ -1,12 +1,23 @@
 gCuadraditos
 ------------
-
 gCuadraditos es un lector de códigos QR para Gnome. 
 
 
 Como Instalar
 -------------
-Ejecute el comando INSTALAR.sh. Por defecto el programa se instalará en '~/.gCuadraditos' y se agregará una entrada al menú e Gnome bajo 'Aplicaciones->Sonido y Video'.
+Ejecute el comando INSTALAR.sh. Por defecto el programa se instalará en
+'~/.gCuadraditos' y se agregará una entrada al menú e Gnome bajo
+'Aplicaciones->Sonido y Video'.
+
+
+Funcionamiento
+--------------
+Simplemente ejecute el programa y la cámara se activara sola.
+Apunte la cámara al código QR y éste de detectará. En caso de
+que el QR contenga una dirección web ésta podrá abrirse en el
+navegador por defecto haciendo click en el botón con el link
+en gCuadraditos. En caso de detectarse texto se desplegará
+en una ventana emergente.
 
 
 Más información

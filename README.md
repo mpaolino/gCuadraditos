@@ -6,7 +6,6 @@ About gCuadraditos Activity
 This is a QR scanner for GNOME.
 
 
-
 Usage
 =====
 
@@ -19,6 +18,7 @@ and text.
 Clicking on the detected URL will open it on the default browser, text will
 be displayed in a pop up window.
 
+
 Authors
 =======
 * Miguel Paolino (mpaolino@ideal.com.uy), Uruguay
@@ -26,7 +26,7 @@ Authors
 
 Contributors
 ============
-* Plan Ceibal Uruguay (XO 1.5, XO 1.75 and JumPC Olidata test laptops)
+* Plan Ceibal Uruguay (XO 1.5, XO 1.75, JumPC Olidata and Magalhaes test laptops)
 
 
 License

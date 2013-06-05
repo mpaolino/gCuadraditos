@@ -12,7 +12,7 @@ Ejecute el comando INSTALAR.sh. Por defecto el programa se instalará en
 
 Funcionamiento
 --------------
-Simplemente ejecute el programa y la cámara se activara sola.
+Simplemente ejecute el programa y la cámara se activará sola.
 Apunte la cámara al código QR y éste de detectará. En caso de
 que el QR contenga una dirección web ésta podrá abrirse en el
 navegador por defecto haciendo click en el botón con el link

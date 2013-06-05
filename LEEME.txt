@@ -19,6 +19,21 @@ navegador por defecto haciendo click en el botón con el link
 en gCuadraditos. En caso de detectarse texto se desplegará
 en una ventana emergente.
 
+Dependencias
+------------
+Este software hace uso extensivo del poder de gstreamer, su sistema de
+plugins y la librería zbar para la decodificación de cada frame de video
+capturado.
+
+Como este software fue pensado para ser utilizado en instalaciones donde
+sus dependencias no estaban presentes y los usuarios carecían de los permisos
+para instalarlas se decidió incluirlas con el paquete.
+
+Todas las librerias del cual depende este software están compiladas para
+la arquitectura x86 32 bits y ARMv7. Si deseas hacer uso de este software
+en otra arquitecutra (como 64bits), simplemente asegúrate de instalar
+gstreamer0.10-plugins-bad con el plugin zbar.
+
 
 Más información
 ---------------

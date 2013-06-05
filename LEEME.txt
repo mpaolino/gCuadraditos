@@ -29,9 +29,9 @@ Como este software fue pensado para ser utilizado en instalaciones donde
 sus dependencias no estaban presentes y los usuarios carecían de los permisos
 para instalarlas se decidió incluirlas con el paquete.
 
-Todas las librerias del cual depende este software están compiladas para
-la arquitectura x86 32 bits y ARMv7. Si deseas hacer uso de este software
-en otra arquitecutra (como 64bits), simplemente asegúrate de instalar
+Todas las librerías incluídas de las cuales depende este software están
+compiladas para la arquitectura x86 32 bits y ARMv7. Si deseas hacer uso de
+este software en otra arquitecutra (como 64bits), simplemente asegúrate de instalar
 gstreamer0.10-plugins-bad con el plugin zbar.
 
 

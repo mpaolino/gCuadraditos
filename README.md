@@ -19,6 +19,20 @@ Clicking on the detected URL will open it on the default browser, text will
 be displayed in a pop up window.
 
 
+Dependencies
+============
+This software uses the power of gstreamer, it's plugin system and zbar library
+for the hard working job of decoding every captured video frame.
+
+Since this software is intended to be used in Latin american OLPC laptops
+that don't have root access for their users all binary libs required are included.
+
+All the needed libraries are compiled for 32bits x86 and for ARMv7 archs,
+so if you have a 64 bits x86 or another different one, and you want to give
+it a try just make sure gstreamer0.10-plugins-bad with the zbar plugin is installed
+on your system.
+
+
 Authors
 =======
 * Miguel Paolino (mpaolino@ideal.com.uy), Uruguay
